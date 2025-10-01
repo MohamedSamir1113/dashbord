@@ -3,8 +3,6 @@ import { useForm } from "react-hook-form";
 import ComponentCard from "../../common/ComponentCard";
 import { createBrand } from "../../../api/brands";
 import { useNavigate } from "react-router";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 
 type FormValues = {
   name: string;
@@ -33,19 +31,13 @@ export default function BrandInputs() {
 
       await createBrand(formData);
 
-      toast.success("Brand created successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+    
 
       reset();
       navigate("/brands");
     } catch (err: any) {
       console.error(err.response?.data || err);
-      toast.error("Failed to create brand", {
-        position: "top-right",
-        autoClose: 3000,
-      });
+    
     } finally {
       setLoading(false);
     }
@@ -53,7 +45,7 @@ export default function BrandInputs() {
 
   return (
     <ComponentCard title="Add Brand">
-      <ToastContainer />
+     
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         {/* Brand Name */}
         <div>

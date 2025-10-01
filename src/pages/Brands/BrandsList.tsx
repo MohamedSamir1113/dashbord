@@ -60,7 +60,7 @@ export default function BrandsList() {
   const handleDelete = async () => {
     if (!selectedBrand) return;
     setDeleting(true);
-    const brandName = selectedBrand.brand_name;
+    
     const brandId = selectedBrand.brand_id;
     const isLastItemOnPage = brands.length === 1 && page > 1;
 
@@ -73,7 +73,7 @@ export default function BrandsList() {
       if (isLastItemOnPage) setPage((p) => p - 1);
     } catch (err) {
       console.error(err);
-      toast.error("Failed to delete brand.");
+   
     } finally {
       setDeleting(false);
     }
