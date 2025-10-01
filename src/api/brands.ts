@@ -9,15 +9,15 @@ const headers = {
 };
 
 
-export const getBrands = async () => {
-  const res = await axios.get(`${API_URL}/brands`, { headers });
+export const getBrands = async (page = 1, perPage = 10) => {
+  const res = await axios.get(`${API_URL}/brands?page=${page}&per_page=${perPage}`, { headers });
   return res.data;
 };
-
 export const getBrand = async (id: number) => {
   const res = await axios.get(`${API_URL}/brands/${id}`, { headers });
   return res.data;
 };
+
 
 export const createBrand = async (formData: FormData) => {
   const res = await axios.post(`${API_URL}/brands`, formData, {
