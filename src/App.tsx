@@ -21,6 +21,7 @@ import Home from "./pages/Dashboard/Home";
 
 import Notifications from "./pages/notifications/Notifiations";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import BrandsList from "./pages/Brands/BrandsList";
 
 export default function App() {
   return (
@@ -79,7 +80,7 @@ export default function App() {
             path="/brands"
             element={
               <ProtectedRoute>
-                <FormElements />
+                <BrandsList/>
               </ProtectedRoute>
             }
           />

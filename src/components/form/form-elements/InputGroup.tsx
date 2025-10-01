@@ -18,7 +18,7 @@ export default function InputGroup() {
     <ComponentCard title="Input Group">
       <div className="space-y-6">
         <div>
-          <Label>Email</Label>
+          <Label>Name</Label>
           <div className="relative">
             <Input
               placeholder="info@gmail.com"
