@@ -138,12 +138,6 @@ export default function ProductsList() {
       const hasDiscount = Number(data.discount) > 0 ? "1" : "0";
       formData.append("has_discount", hasDiscount);
 
-      // Images
-      if (data.images && data.images.length > 0) {
-        Array.from(data.images).forEach((file) =>
-          formData.append("images[]", file)
-        );
-      }
 
       // Required fields (uneditable)
       formData.append("sku", selectedProduct.sku);
@@ -412,21 +406,7 @@ export default function ProductsList() {
               />
             </div>
 
-            <div>
-              <label
-                htmlFor="images"
-                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
-              >
-                Images
-              </label>
-              <input
-                id="images"
-                type="file"
-                {...register("images")}
-                multiple
-                className="w-full"
-              />
-            </div>
+           
 
             <button
               type="submit"
