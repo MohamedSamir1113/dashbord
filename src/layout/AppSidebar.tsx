@@ -29,12 +29,12 @@ const navItems: NavItem[] = [
   {
     name: "Forms",
     icon: <ListIcon />,
-    subItems: [{ name: "Add Brand", path: "/brands-form", pro: false }],
+    subItems: [{ name: "Add Brand", path: "/brands-form", pro: false },{ name: "Add Product", path: "/products-form", pro: false }],
   },
   {
     name: "Tables",
     icon: <TableIcon />,
-    subItems: [{ name: "Brands Table", path: "/brands", pro: false }],
+    subItems: [{ name: "Brands Table", path: "/brands", pro: false },{ name: "Products Table", path: "/products", pro: false }],
   },
 ];
 

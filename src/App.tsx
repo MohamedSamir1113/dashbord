@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router";
 import SignIn from "./pages/AuthPages/SignIn";
 import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
-import UserProfiles from "./pages/UserProfiles";
 import Videos from "./pages/UiElements/Videos";
 import Images from "./pages/UiElements/Images";
 import Alerts from "./pages/UiElements/Alerts";
@@ -11,10 +10,6 @@ import Avatars from "./pages/UiElements/Avatars";
 import Buttons from "./pages/UiElements/Buttons";
 import LineChart from "./pages/Charts/LineChart";
 import BarChart from "./pages/Charts/BarChart";
-import Calendar from "./pages/Calendar";
-import BasicTables from "./pages/Tables/BasicTables";
-import FormElements from "./pages/Forms/FormElements";
-import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
@@ -22,8 +17,11 @@ import Home from "./pages/Dashboard/Home";
 import Notifications from "./pages/notifications/Notifiations";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import BrandsList from "./pages/Brands/BrandsList";
-import BrandInputs from "./components/form/form-elements/BrandInputs";
+
 import BrandsForm from "./pages/Forms/BrandsForm";
+import ProductsForm from "./pages/Forms/ProductsForm";
+import ProductsList from "./pages/Products/ProductsList";
+import SelectedProduct from "./pages/Products/SelectedProduct";
 
 export default function App() {
   return (
@@ -42,66 +40,48 @@ export default function App() {
             }
           />
 
-          {/* Others Page */}
+          {/* brand */}
+
           <Route
-            path="/profile"
+            path="/products"
             element={
               <ProtectedRoute>
-                <UserProfiles />
+                <ProductsList />
               </ProtectedRoute>
             }
           />
           <Route
-            path="/calendar"
+            path="/products-form"
             element={
               <ProtectedRoute>
-                <Calendar />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/blank"
-            element={
-              <ProtectedRoute>
-                <Blank />
+                <ProductsForm />
               </ProtectedRoute>
             }
           />
 
-          {/* Forms */}
           <Route
-            path="/form-elements"
+            path="/products/:id"
             element={
               <ProtectedRoute>
-                <FormElements />
+                <SelectedProduct />
               </ProtectedRoute>
             }
           />
 
-            <Route
+          <Route
             path="/brands"
             element={
               <ProtectedRoute>
-                <BrandsList/>
+                <BrandsList />
               </ProtectedRoute>
             }
           />
 
-           <Route
+          <Route
             path="/brands-form"
             element={
               <ProtectedRoute>
-               <BrandsForm/>
-              </ProtectedRoute>
-            }
-          />
-
-          {/* Tables */}
-          <Route
-            path="/basic-tables"
-            element={
-              <ProtectedRoute>
-                <BasicTables />
+                <BrandsForm />
               </ProtectedRoute>
             }
           />
@@ -156,7 +136,6 @@ export default function App() {
             }
           />
 
-        
           <Route
             path="/notifications"
             element={
