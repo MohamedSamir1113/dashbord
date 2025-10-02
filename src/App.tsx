@@ -24,6 +24,7 @@ import ProductsList from "./pages/Products/ProductsList";
 import SelectedProduct from "./pages/Products/SelectedProduct";
 import NotificationList from "./pages/notifications/NotificationList";
 import NotificationForm from "./pages/Forms/NotificationForm";
+import SelectedBrand from "./pages/Brands/SelectedBrand";
 
 export default function App() {
   return (
@@ -82,6 +83,15 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <BrandsForm />
+              </ProtectedRoute>
+            }
+          />
+
+           <Route
+            path="/brands/:id"
+            element={
+              <ProtectedRoute>
+                <SelectedBrand/>
               </ProtectedRoute>
             }
           />
