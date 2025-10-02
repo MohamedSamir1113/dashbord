@@ -19,22 +19,16 @@ type FormValues = {
   quantity: number;
   brand_id: string;
   category_id: string;
-  images?: FileList;
+  images?: File[];
 };
 
 export default function ProductsForm() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    watch,
-    control,
-    formState: { errors },
-  } = useForm<FormValues>({
+  const { register, handleSubmit, reset, watch, control, formState: { errors } } = useForm<FormValues>({
     defaultValues: {
       has_discount: "0",
       quantity: 1,
@@ -44,11 +38,13 @@ export default function ProductsForm() {
 
   const hasDiscount = watch("has_discount");
 
-  const handleImageChange = (files?: FileList) => {
-    if (!files) return;
-    const previews = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
+  const handleFileChange = (files: FileList) => {
+    const newFiles = Array.from(files);
+    const updatedFiles = [...selectedFiles, ...newFiles];
+    setSelectedFiles(updatedFiles);
+
+    // Update previews
+    const previews = updatedFiles.map(file => URL.createObjectURL(file));
     setImagePreviews(previews);
   };
 
@@ -63,29 +59,23 @@ export default function ProductsForm() {
       formData.append("sku", data.sku);
       formData.append("price", String(data.price));
       formData.append("has_discount", data.has_discount);
+
       if (data.has_discount === "1") {
         formData.append("discount", data.discount || "0");
-        formData.append(
-          "start_discount",
-          data.start_discount ? data.start_discount.toISOString() : ""
-        );
-        formData.append(
-          "end_discount",
-          data.end_discount ? data.end_discount.toISOString() : ""
-        );
+        formData.append("start_discount", data.start_discount ? data.start_discount.toISOString() : "");
+        formData.append("end_discount", data.end_discount ? data.end_discount.toISOString() : "");
       }
+
       formData.append("quantity", String(data.quantity));
       formData.append("brand_id", data.brand_id);
       formData.append("category_id", data.category_id);
 
-      if (data.images && data.images.length > 0) {
-        Array.from(data.images).forEach((file) =>
-          formData.append("images[]", file)
-        );
-      }
+      // Append all selected files
+      selectedFiles.forEach(file => formData.append("images[]", file));
 
       await addProduct(formData);
       reset();
+      setSelectedFiles([]);
       setImagePreviews([]);
       navigate("/products");
     } catch (err: any) {
@@ -97,13 +87,9 @@ export default function ProductsForm() {
 
   return (
     <ComponentCard title="Add Product">
-      <form
-        className="space-y-6"
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        {/* Input Field Component */}
-        {/** A reusable styled input */}
-        {/** Name */}
+      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+
+        {/* Name */}
         <div>
           <label className="block text-sm font-semibold mb-1">Name</label>
           <input
@@ -113,18 +99,12 @@ export default function ProductsForm() {
             }`}
             placeholder="Product name"
           />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">
-              {errors.name.message}
-            </p>
-          )}
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>}
         </div>
 
         {/* Small Description */}
         <div>
-          <label className="block text-sm font-semibold mb-1">
-            Small Description
-          </label>
+          <label className="block text-sm font-semibold mb-1">Small Description</label>
           <textarea
             {...register("small_desc")}
             className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
@@ -134,9 +114,7 @@ export default function ProductsForm() {
 
         {/* Description */}
         <div>
-          <label className="block text-sm font-semibold mb-1">
-            Description
-          </label>
+          <label className="block text-sm font-semibold mb-1">Description</label>
           <textarea
             {...register("desc")}
             className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
@@ -167,9 +145,7 @@ export default function ProductsForm() {
 
         {/* Has Discount */}
         <div>
-          <label className="block text-sm font-semibold mb-1">
-            Has Discount?
-          </label>
+          <label className="block text-sm font-semibold mb-1">Has Discount?</label>
           <select
             {...register("has_discount")}
             className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
@@ -183,9 +159,7 @@ export default function ProductsForm() {
         {hasDiscount === "1" && (
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-semibold mb-1">
-                Discount Amount
-              </label>
+              <label className="block text-sm font-semibold mb-1">Discount Amount</label>
               <input
                 type="number"
                 step="0.01"
@@ -195,9 +169,7 @@ export default function ProductsForm() {
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-1">
-                Discount Start
-              </label>
+              <label className="block text-sm font-semibold mb-1">Discount Start</label>
               <Controller
                 control={control}
                 name="start_discount"
@@ -206,15 +178,13 @@ export default function ProductsForm() {
                     placeholderText="Start date"
                     className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     selected={field.value}
-                    onChange={(date) => field.onChange(date)}
+                    onChange={field.onChange}
                   />
                 )}
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-1">
-                Discount End
-              </label>
+              <label className="block text-sm font-semibold mb-1">Discount End</label>
               <Controller
                 control={control}
                 name="end_discount"
@@ -223,7 +193,7 @@ export default function ProductsForm() {
                     placeholderText="End date"
                     className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     selected={field.value}
-                    onChange={(date) => field.onChange(date)}
+                    onChange={field.onChange}
                   />
                 )}
               />
@@ -264,8 +234,9 @@ export default function ProductsForm() {
           <input
             type="file"
             multiple
-            {...register("images")}
-            onChange={(e) => handleImageChange(e.target.files!)}
+            onChange={(e) => {
+              if (e.target.files) handleFileChange(e.target.files);
+            }}
             className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-400 focus:outline-none"
           />
           {imagePreviews.length > 0 && (
